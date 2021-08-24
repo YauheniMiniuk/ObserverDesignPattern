@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Message>
+@{ 
+    Layout = "_Layout";
+    ViewBag.Title = "Messages";
+}
+<h1>Create Message</h1>
+<div class="mb-3">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Message</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.MessageText</td>
+                    <td>@m.DateTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Create" class="btn btn-primary">Create</a>
+</div>

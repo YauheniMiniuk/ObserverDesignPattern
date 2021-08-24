@@ -1,0 +1,18 @@
+﻿@model Message
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Create Message";
+}
+<div class="row">
+    <div class="mb-3">
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label class="form-label" asp-for="MessageText"></label>
+                <input class="form-control" asp-for="MessageText" />
+            </div>
+            <input type="hidden" asp-for="DateTime" value="@DateTime.Now" />
+            <button type="submit" class="btn btn-primary">Send</button>
+            <a class="btn btn-danger" asp-action="Index">Cancel</a>
+        </form>
+    </div>
+</div>
