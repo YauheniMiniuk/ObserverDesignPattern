@@ -10,19 +10,23 @@ namespace ObserverDesignPattern.Controllers
     public class HomeController : Controller
     {
         private IMessages repository;
-        public HomeController(IMessages msg)
+        private IMessageService messageService;
+        public HomeController(IMessages msg, IMessageService msgService)
         {
             repository = msg;
+            messageService = msgService;
+            messageService.Attach(new MessageObserver());
         }
         public ViewResult Index()
         {
-            Console.WriteLine("Hello");
             return View(repository.Messages);
         }
         public ViewResult Create() => View();
         [HttpPost]
         public IActionResult Create(Message message)
         {
+            messageService.UpdateMessage(message);
+
             repository.AddMessage(message);
             return RedirectToAction(nameof(Index));
         }

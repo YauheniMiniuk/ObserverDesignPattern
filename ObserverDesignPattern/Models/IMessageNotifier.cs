@@ -16,8 +16,31 @@ namespace ObserverDesignPattern.Models
         // Notify all order observers about an event.
         void Notify(Message message);
     }
-    public interface IMessageServices : IMessageNotifier
+    public interface IMessageService : IMessageNotifier
     {
         void UpdateMessage(Message message);
+    }
+    public class MessageService : IMessageService
+    {
+        public List<IMessageObserver> Observers = new List<IMessageObserver>();
+        public void UpdateMessage(Message message)
+        {
+            Notify(message);
+        }
+        public void Attach(IMessageObserver observer)
+        {
+            Observers.Add(observer);
+        }
+        public void Detach(IMessageObserver observer)
+        {
+            Observers.Remove(observer);
+        }
+        public void Notify(Message message)
+        {
+            foreach (var obs in Observers)
+            {
+                obs.Update(message);
+            }
+        }
     }
 }
