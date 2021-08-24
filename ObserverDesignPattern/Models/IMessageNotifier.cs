@@ -22,7 +22,10 @@ namespace ObserverDesignPattern.Models
     }
     public class MessageService : IMessageService
     {
-        public List<IMessageObserver> Observers = new List<IMessageObserver>();
+        public List<IMessageObserver> Observers = new List<IMessageObserver>
+        {
+            new MessageObserver()
+        };
         public void UpdateMessage(Message message)
         {
             Notify(message);

@@ -15,11 +15,11 @@ namespace ObserverDesignPattern.Controllers
         {
             repository = msg;
             messageService = msgService;
-            messageService.Attach(new MessageObserver());
         }
-        public ViewResult Index()
+        public ViewResult Index(Message message)
         {
-            return View(repository.Messages);
+            ViewBag.Messages = repository.Messages;
+            return View(message);
         }
         public ViewResult Create() => View();
         [HttpPost]
@@ -29,6 +29,11 @@ namespace ObserverDesignPattern.Controllers
 
             repository.AddMessage(message);
             return RedirectToAction(nameof(Index));
+        }
+        public Message GetMessages(Message message)
+        {
+            repository.AddMessage(message);
+            return repository.Messages.Last();
         }
     }
 }

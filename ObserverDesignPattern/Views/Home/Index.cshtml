@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Message>
+﻿@model Message
 @{ 
     Layout = "_Layout";
     ViewBag.Title = "Messages";
@@ -12,8 +12,8 @@
                 <th>Time</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var m in Model)
+        <tbody id="messages">
+            @foreach (Message m in ViewBag.Messages)
             {
                 <tr>
                     <td>@m.MessageText</td>
@@ -22,5 +22,38 @@
             }
         </tbody>
     </table>
-    <a asp-action="Create" class="btn btn-primary">Create</a>
+    @*<a asp-action="Create" class="btn btn-primary">Create</a>*@
 </div>
+<div class="row">
+    <div class="mb-3">
+        <form id="form" method="post">
+            <div class="mb-3">
+                <label class="form-label" asp-for="@Model.MessageText"></label>
+                <input class="form-control" asp-for="@Model.MessageText" />
+            </div>
+            <input type="hidden" asp-for="@Model.DateTime" value="@DateTime.Now" />
+            <button type="submit" class="btn btn-primary">Send</button>
+            @*<a class="btn btn-danger" asp-action="Index">Cancel</a>*@
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#form").submit(function (e) {
+        e.preventDefault(e);
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetMessages")",
+            cache: false,
+            dataType: "text",
+            data: $(this).serialize(),
+            success: function (data) {
+                var obj = JSON.parse(data, function (key, value) {
+                    if (key == 'dateTime') return new Date(value);
+                    return value;
+                });
+                $("#messages").append("<tr><td>"+obj.messageText+"</td><td>"+obj.dateTime.getHours()+":"+obj.dateTime.getMinutes()+"</td></tr>");
+            }
+        });
+    });
+</script>

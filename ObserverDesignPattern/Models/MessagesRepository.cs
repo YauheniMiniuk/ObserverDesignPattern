@@ -12,13 +12,7 @@ namespace ObserverDesignPattern.Models
     }
     public class MemoryMessages : IMessages
     {
-        private List<Message> messages = new List<Message>
-        {
-            new Message{MessageText = "Hello", DateTime = DateTime.Now },
-            new Message{MessageText = "Hi", DateTime = DateTime.Now },
-            new Message{MessageText = "How are you?", DateTime = DateTime.Now },
-            new Message{MessageText = "Fine", DateTime = DateTime.Now }
-        };
+        private List<Message> messages = new List<Message>();
         public IEnumerable<Message> Messages => messages;
         public Message AddMessage(Message msg)
         {
