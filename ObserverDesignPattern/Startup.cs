@@ -20,6 +20,7 @@ namespace ObserverDesignPattern
             services.AddMvc();
             services.AddSingleton<IMessages, MemoryMessages>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -31,10 +32,11 @@ namespace ObserverDesignPattern
             }
 
             app.UseRouting();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
-
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chatter");
                 endpoints.MapDefaultControllerRoute();
             });
         }
