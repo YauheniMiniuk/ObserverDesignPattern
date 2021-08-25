@@ -3,29 +3,41 @@
 }
 
 <div id="inputForm" class="form-group">
-    <input type="text" id="message" class="form-label" />
+    <div>
+        <label class="form-label">Name</label>
+        <input type="text" id="name" class="form-control" />
+    </div>
+    <input type="hidden" id="date" value="@DateTime.Now" />
+    <div>
+        <label class="form-label">Message</label>
+        <input type="text" id="message" class="form-control" />
+    </div>
     <input type="button" id="sendBtn" value="Отправить" class="btn btn-primary" />
 </div>
 <div id="chatroom" class="mb-3"></div>
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
 <script>
-        const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/chatter")
-            .build();
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/chatter")
+        .build();
 
-        hubConnection.on("Send", function (data) {
-            console.log(data);
-            let elem = document.createElement("p");
-            elem.appendChild(document.createTextNode(data));
-            let firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(elem, firstElem);
+    hubConnection.on("Send", function (message, name, date) {
+        console.log(message, name, date);
+        document.getElementById("message").value = "";
+        let elem = document.createElement("p");
+        elem.innerHTML = "<b>" + name + ":</b> " + message + "<br>" + date;
+        //elem.appendChild(document.createTextNode("<b>"+name+":</b>"+message+"</hr>"+date));
+        let firstElem = document.getElementById("chatroom").firstChild;
+        document.getElementById("chatroom").insertBefore(elem, firstElem);
 
-        });
+    });
 
-        document.getElementById("sendBtn").addEventListener("click", function (e) {
-            let message = document.getElementById("message").value;
-            hubConnection.invoke("Send", message);
-        });
+    document.getElementById("sendBtn").addEventListener("click", function (e) {
+        let name = document.getElementById("name").value;
+        let message = document.getElementById("message").value;
+        let date = document.getElementById("date").value;
+        hubConnection.invoke("Send", message, name, date);
+    });
 
-        hubConnection.start();
+    hubConnection.start();
 </script>

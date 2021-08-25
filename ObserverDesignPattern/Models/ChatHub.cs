@@ -8,9 +8,9 @@ namespace ObserverDesignPattern.Models
 {
     public class ChatHub : Hub
     {
-        public async Task Send(string message)
+        public async Task Send(string message, string name, string date)
         {
-            await this.Clients.All.SendAsync("Send", message);
+            await this.Clients.All.SendAsync("Send", message, name, date);
         }
     }
 }
